@@ -1,4 +1,4 @@
-package com.mynotes.project.database;
+package com.mynotes.project.database.entity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,28 +8,33 @@ import dagger.Provides;
 
 @Entity(tableName = "notes")
 public class NoteEntity {
+
+
+
     @NonNull
     @PrimaryKey(autoGenerate = true)
-    int id;
+    Integer id;
     @NonNull
     String name;
     @Nullable
     String noteText;
-    @Nullable
     boolean isFavorite;
 
-    public NoteEntity(int id, @NonNull String name, @Nullable String noteText, boolean isFavorite) {
-        this.id = id;
-        this.name = name;
-        this.noteText = noteText;
-        this.isFavorite = isFavorite;
+    public NoteEntity() {
     }
 
-    public int getId() {
+    //    public NoteEntity(@NonNull Integer id, @NonNull String name, @Nullable String noteText, boolean isFavorite) {
+//        this.id = id;
+//        this.name = name;
+//        this.noteText = noteText;
+//        this.isFavorite = isFavorite;
+//    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

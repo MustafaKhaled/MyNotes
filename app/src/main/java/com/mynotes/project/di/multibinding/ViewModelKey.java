@@ -1,4 +1,4 @@
-package com.a800pharmacy.app.di.module.multibinding;
+package com.mynotes.project.di.multibinding;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

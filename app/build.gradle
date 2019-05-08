@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 28
@@ -16,6 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 }
 
 dependencies {
@@ -26,6 +32,7 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0-alpha05'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha05'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha04'
+    implementation 'androidx.cardview:cardview:1.0.0'
 
     //Sdp library
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
@@ -35,8 +42,39 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
     implementation 'android.arch.navigation:navigation-fragment:1.0.0'
 
+    // RxJava
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
     //Room
     implementation 'androidx.room:room-runtime:2.0.0'
     annotationProcessor 'androidx.room:room-compiler:2.0.0'
-    implementation 'android.arch.persistence.room:rxjava2:2.0.0'
+    implementation 'androidx.room:room-rxjava2:2.1.0-alpha07'
+    implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.0.0-beta01'
+
+    //Admob
+    implementation 'com.google.android.gms:play-services-ads:17.2.0'
+
+    //firebase
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+    implementation 'com.google.android.material:material:1.0.0'
+
+    //Dagger 2 Dependency injection
+    implementation 'com.google.dagger:dagger-android:2.21'
+    implementation 'com.google.dagger:dagger-android-support:2.21'
+    // if you use the support libraries
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.21'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.21'
+
+    //lifecycle
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.0.0-beta01'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0-beta01'
+
+    //navigation component
+    implementation "androidx.navigation:navigation-fragment:2.0.0"
+    implementation "androidx.navigation:navigation-ui:2.0.0"
+
 }
+apply plugin: 'com.google.gms.google-services'
