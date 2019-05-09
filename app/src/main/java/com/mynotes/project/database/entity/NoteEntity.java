@@ -20,15 +20,12 @@ public class NoteEntity {
     String noteText;
     boolean isFavorite;
 
-    public NoteEntity() {
-    }
 
-    //    public NoteEntity(@NonNull Integer id, @NonNull String name, @Nullable String noteText, boolean isFavorite) {
-//        this.id = id;
-//        this.name = name;
-//        this.noteText = noteText;
-//        this.isFavorite = isFavorite;
-//    }
+        public NoteEntity( @NonNull String name, @Nullable String noteText, boolean isFavorite) {
+        this.name = name;
+        this.noteText = noteText;
+        this.isFavorite = isFavorite;
+    }
 
     public Integer getId() {
         return id;
