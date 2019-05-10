@@ -11,6 +11,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class HomePageViewModel extends ViewModel {
 
@@ -26,7 +31,26 @@ public class HomePageViewModel extends ViewModel {
     }
 
     public void insertNote(NoteEntity noteEntity){
-        homeFragmentRepository.insert(noteEntity);
+        Completable.fromAction(() -> {
+            homeFragmentRepository.insert(noteEntity);
+        }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                Timber.d("Subscribing");
+            }
+
+            @Override
+            public void onComplete() {
+                Timber.d("Completed");
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.d("Error thrown "+ e.getMessage());
+
+            }
+        });
     }
 
 }

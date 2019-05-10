@@ -2,4 +2,5 @@
     <string name="app_name">My Notes</string>
     <string name="my_notes_label">My Notes</string>
     <string name="create_btn">Create</string>
+    <string name="no_note_here_hint">No note here !</string>
 </resources>

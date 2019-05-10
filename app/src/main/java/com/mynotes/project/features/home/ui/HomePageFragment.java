@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,35 +13,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavArgument;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.mynotes.project.R;
 import com.mynotes.project.database.entity.NoteEntity;
 import com.mynotes.project.di.multibinding.DaggerViewModelFactory;
 import com.mynotes.project.features.home.di.component.DaggerHomePageComponent;
 import com.mynotes.project.features.home.di.component.HomePageComponent;
+import com.mynotes.project.features.home.ui.reyclerview.NoteAdapter;
+import com.mynotes.project.features.home.ui.reyclerview.OnNoteListnerInterface;
 import com.mynotes.project.features.home.viewmodel.HomePageViewModel;
+import com.mynotes.project.features.notedetails.ui.NoteDetailsFragment;
 import com.mynotes.project.util.MyApplication;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
+import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
 
-public class HomePageFragment extends Fragment {
+public class HomePageFragment extends Fragment implements OnNoteListnerInterface {
     private static final String TAG = "HomePageFragment";
     private HomePageViewModel homePageViewModel;
     @Inject
@@ -48,6 +47,13 @@ public class HomePageFragment extends Fragment {
     HomePageComponent homePageComponent;
     @BindView(R.id.add_note)
     FloatingActionButton floatingActionButton;
+    @BindView(R.id.note_rv)
+    RecyclerView notesRv;
+    @BindView(R.id.empty_note_tv)
+    TextView noNote;
+
+    private NoteAdapter noteAdapter = new NoteAdapter(this::onItemClicked);
+
     public HomePageFragment() {
     }
 
@@ -57,7 +63,6 @@ public class HomePageFragment extends Fragment {
         homePageComponent = DaggerHomePageComponent.builder().appComponent(((MyApplication) getActivity().getApplicationContext()).getAppComponent()).build();
         homePageComponent.inject(this);
         homePageViewModel = ViewModelProviders.of(this,daggerViewModelFactory).get(HomePageViewModel.class);
-
     }
 
     @Nullable
@@ -65,42 +70,27 @@ public class HomePageFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View res = inflater.inflate(R.layout.main_page_fragment,container,false);
         ButterKnife.bind(this,res);
+        homePageViewModel.getNotesFromRepository().observe(this, listObserver);
         return res;
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        homePageViewModel.getNotesFromRepository().observe(this, noteEntities -> {
-            Timber.d("onViewCreated: Note size is : " + noteEntities.size());
-            Timber.d("onViewCreated: Note name example : " + noteEntities.get(0).getName() );
+        setUpRecyclerView();
+
+        notesRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0 && floatingActionButton.getVisibility() == View.VISIBLE) {
+                    floatingActionButton.hide();
+                } else if (dy < 0 && floatingActionButton.getVisibility() != View.VISIBLE) {
+                    floatingActionButton.show();
+                }
+            }
         });
-
         floatingActionButton.setOnClickListener(v -> {
-            Completable.fromAction(() -> {
-                    homePageViewModel.insertNote(new NoteEntity("Note","text 1",false));
-            }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
-                @Override
-                public void onSubscribe(Disposable d) {
-                    Timber.d("Subscribing");
-                }
-
-                @Override
-                public void onComplete() {
-                    Timber.d("Completed");
-
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    Timber.d("Error thrown "+ e.getMessage());
-
-                }
-            });
-
-
-//            NavController navController = Navigation.findNavController(getActivity(),R.id.nav_host);
-//            navController.navigate(R.id.action_homePageFragment_to_noteDetailsFragment);
+            showBottomSheetDialog();
         });
     }
 
@@ -110,11 +100,41 @@ public class HomePageFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getActivity().getResources().getString(R.string.my_notes_label));
     }
-
-    public void showBottomSheetDialog() {
-        View view = getLayoutInflater().inflate(R.layout.new_note_bottom_nav, null);
-        BottomSheetDialog dialog = new BottomSheetDialog(view.getContext());
-        dialog.setContentView(view);
+     private void showBottomSheetDialog() {
+        View sheetView = getLayoutInflater().inflate(R.layout.new_note_bottom_nav, null);
+        ButterKnife.bind(sheetView);
+        BottomSheetDialog dialog = new BottomSheetDialog(sheetView.getContext());
+        dialog.setContentView(sheetView);
         dialog.show();
+         TextInputEditText textInputLayout = dialog.findViewById(R.id.note_name);
+         MaterialButton createBtn = dialog.findViewById(R.id.create_btn);
+         createBtn.setOnClickListener(v -> {
+             NoteEntity noteEntity = new NoteEntity(textInputLayout.getText().toString(), "", false);
+             homePageViewModel.insertNote(noteEntity);
+             noteAdapter.addSingleItem(noteEntity);
+             dialog.dismiss();
+        });
+    }
+    private void setUpRecyclerView(){
+        notesRv.setAdapter(noteAdapter);
+        notesRv.setLayoutManager(new GridLayoutManager(getContext(),2,RecyclerView.VERTICAL,false));
+        FadeInUpAnimator fade = new FadeInUpAnimator();
+        fade.setAddDuration(500);
+        notesRv.setItemAnimator(fade);
+    }
+    private Observer<List<NoteEntity>> listObserver = noteEntities -> {
+        if(noteEntities!=null && noteEntities.size()>0){
+            noNote.setVisibility(View.GONE);
+            if(noteAdapter.getItemCount()==0)
+            noteAdapter.addItems(noteEntities);
+        }
+    };
+
+    @Override
+    public void onItemClicked(int position) {
+
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host);
+        navController.navigate(HomePageFragmentDirections.actionHomePageFragmentToNoteDetailsFragment(position));
+//        navController.navigate(R.id.action_homePageFragment_to_noteDetailsFragment,);
     }
 }
