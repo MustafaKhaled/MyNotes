@@ -14,6 +14,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@android:color/white"
+        android:gravity="start|center_horizontal"
+        android:textAlignment="gravity"
         ads:layout_constraintBottom_toTopOf="@+id/adView"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent"

@@ -19,6 +19,10 @@ import com.mynotes.project.R;
 import com.mynotes.project.database.entity.NoteEntity;
 import com.mynotes.project.di.multibinding.DaggerViewModelFactory;
 import com.mynotes.project.features.home.viewmodel.HomePageViewModel;
+import com.mynotes.project.features.notedetails.di.component.DaggerNoteDetailsFragmentComponent;
+import com.mynotes.project.features.notedetails.di.component.NoteDetailsFragmentComponent;
+import com.mynotes.project.features.notedetails.viewmodel.NoteDetailsFragmentViewModel;
+import com.mynotes.project.util.MyApplication;
 
 import java.util.List;
 
@@ -31,7 +35,9 @@ import timber.log.Timber;
 
 public class NoteDetailsFragment extends Fragment {
     private static final String TAG = "NoteDetailsFragment";
-    private HomePageViewModel homePageViewModel;
+    private NoteDetailsFragmentViewModel noteDetailsFragmentViewModel;
+    private String title;
+    private int noteId;
     @Inject
     DaggerViewModelFactory daggerViewModelFactory;
     @BindView(R.id.adView)
@@ -42,7 +48,12 @@ public class NoteDetailsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        homePageViewModel = ViewModelProviders.of(this,daggerViewModelFactory).get(HomePageViewModel.class);
+        NoteDetailsFragmentComponent detailsFragmentComponent = DaggerNoteDetailsFragmentComponent.builder()
+                .appComponent(((MyApplication) getActivity().getApplicationContext()).getAppComponent()).build();
+        detailsFragmentComponent.inject(this);
+        noteDetailsFragmentViewModel = ViewModelProviders.of(this,daggerViewModelFactory).get(NoteDetailsFragmentViewModel.class);
+        title = NoteDetailsFragmentArgs.fromBundle(getArguments()).getNoteTitle();
+        noteId = NoteDetailsFragmentArgs.fromBundle(getArguments()).getNoteId();
     }
 
     @Nullable
@@ -66,7 +77,7 @@ public class NoteDetailsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(title);
 
     }
 

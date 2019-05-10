@@ -25,5 +25,8 @@
         <argument
             android:name="note_id"
             app:argType="integer" />
+        <argument
+            android:name="note_title"
+            app:argType="string" />
     </fragment>
 </navigation>

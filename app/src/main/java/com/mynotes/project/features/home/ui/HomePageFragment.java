@@ -42,6 +42,7 @@ import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
 public class HomePageFragment extends Fragment implements OnNoteListnerInterface {
     private static final String TAG = "HomePageFragment";
     private HomePageViewModel homePageViewModel;
+    private List<NoteEntity> noteEntityList;
     @Inject
     DaggerViewModelFactory daggerViewModelFactory;
     HomePageComponent homePageComponent;
@@ -124,6 +125,7 @@ public class HomePageFragment extends Fragment implements OnNoteListnerInterface
     }
     private Observer<List<NoteEntity>> listObserver = noteEntities -> {
         if(noteEntities!=null && noteEntities.size()>0){
+            this.noteEntityList = noteEntities;
             noNote.setVisibility(View.GONE);
             if(noteAdapter.getItemCount()==0)
             noteAdapter.addItems(noteEntities);
@@ -134,7 +136,6 @@ public class HomePageFragment extends Fragment implements OnNoteListnerInterface
     public void onItemClicked(int position) {
 
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host);
-        navController.navigate(HomePageFragmentDirections.actionHomePageFragmentToNoteDetailsFragment(position));
-//        navController.navigate(R.id.action_homePageFragment_to_noteDetailsFragment,);
+        navController.navigate(HomePageFragmentDirections.actionHomePageFragmentToNoteDetailsFragment(position,noteEntityList.get(position).getName()));
     }
 }
