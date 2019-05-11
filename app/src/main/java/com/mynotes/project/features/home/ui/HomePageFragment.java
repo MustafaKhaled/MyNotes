@@ -3,6 +3,8 @@ package com.mynotes.project.features.home.ui;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -45,27 +47,30 @@ public class HomePageFragment extends Fragment implements OnNoteListnerInterface
     private List<NoteEntity> noteEntityList;
     @Inject
     DaggerViewModelFactory daggerViewModelFactory;
-    HomePageComponent homePageComponent;
+    private HomePageComponent homePageComponent;
     @BindView(R.id.add_note)
     FloatingActionButton floatingActionButton;
     @BindView(R.id.note_rv)
     RecyclerView notesRv;
     @BindView(R.id.empty_note_tv)
     TextView noNote;
-
     private NoteAdapter noteAdapter = new NoteAdapter(this::onItemClicked);
-
     public HomePageFragment() {
     }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         homePageComponent = DaggerHomePageComponent.builder().appComponent(((MyApplication) getActivity().getApplicationContext()).getAppComponent()).build();
         homePageComponent.inject(this);
         homePageViewModel = ViewModelProviders.of(this,daggerViewModelFactory).get(HomePageViewModel.class);
+        setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.clear();
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,7 +99,6 @@ public class HomePageFragment extends Fragment implements OnNoteListnerInterface
             showBottomSheetDialog();
         });
     }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -136,6 +140,7 @@ public class HomePageFragment extends Fragment implements OnNoteListnerInterface
     public void onItemClicked(int position) {
 
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host);
-        navController.navigate(HomePageFragmentDirections.actionHomePageFragmentToNoteDetailsFragment(position,noteEntityList.get(position).getName()));
+        navController.navigate(HomePageFragmentDirections.actionHomePageFragmentToNoteDetailsFragment(
+                position+1,noteEntityList.get(position).getName(),noteEntityList.get(position).isFavorite()));
     }
 }

@@ -28,4 +28,8 @@ public class NoteDetailsRepository {
     public LiveData<String> loadNote(int id){
         return noteRepository.getNoteText(id);
     }
+
+    public void updateAllFavorites(){
+        noteRepository.updateAllFavorite(false);
+    }
 }

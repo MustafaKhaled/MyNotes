@@ -43,12 +43,54 @@ public class NoteDetailsFragmentViewModel extends ViewModel {
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: Error occured"+ e.getMessage());
             }
-        })
-        ;
+        });
+    }
+
+    public void updateFavorite(int id, boolean b){
+        Completable.fromAction(() -> noteDetailsRepository.updateFavorite(id,b))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable.add(d);
+                    }
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: favorite updated");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: Error occured"+ e.getMessage());
+                    }
+                });
     }
 
     public LiveData<String> loadNote(int id){
         return noteDetailsRepository.loadNote(id);
+    }
+
+
+    public void updateAllFavoriteToFalse(){
+        Completable.fromAction(() -> noteDetailsRepository.updateAllFavorites())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable.add(d);
+                    }
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: All favorites updated");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: Error occured"+ e.getMessage());
+                    }
+                });
     }
 
     @Override

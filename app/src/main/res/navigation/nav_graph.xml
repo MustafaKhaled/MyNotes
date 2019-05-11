@@ -28,5 +28,8 @@
         <argument
             android:name="note_title"
             app:argType="string" />
+        <argument
+            android:name="isFavorite"
+            app:argType="boolean" />
     </fragment>
 </navigation>

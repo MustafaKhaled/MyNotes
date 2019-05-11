@@ -30,4 +30,7 @@ public interface NoteDao {
 
     @Query("DELETE FROM notes WHERE id=:id")
     void deleteNote(Integer id);
+
+    @Query("UPDATE notes SET isFavorite=:isfav")
+    void updateAllFavorite(boolean isfav);
 }

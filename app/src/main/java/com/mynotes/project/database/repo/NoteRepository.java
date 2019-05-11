@@ -15,4 +15,5 @@ public interface NoteRepository {
     void updateNote(String text, int id);
     void updateFavorite(boolean isfav, int id);
     void deleteNote(int id);
+    void updateAllFavorite(boolean isfav);
 }

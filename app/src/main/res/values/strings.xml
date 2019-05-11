@@ -3,4 +3,11 @@
     <string name="my_notes_label">My Notes</string>
     <string name="create_btn">Create</string>
     <string name="no_note_here_hint">No note here !</string>
+    <string name="save_label">Save</string>
+    <string name="make_it_favorite_label">Make it Favorite</string>
+    <string name="save_note_msg">Save Note?</string>
+    <string name="yes_btn">Yes</string>
+    <string name="no_btn">No</string>
+    <string name="remove_from_favorite_menu">Remove from favorite</string>
+    <string name="my_favorite_note_label">My Favorite Note</string>
 </resources>

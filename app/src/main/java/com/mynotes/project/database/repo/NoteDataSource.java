@@ -8,7 +8,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.lifecycle.LiveData;
-import io.reactivex.Completable;
 
 public class NoteDataSource implements NoteRepository{
     private NoteDao noteDao;
@@ -46,5 +45,10 @@ public class NoteDataSource implements NoteRepository{
     @Override
     public void deleteNote(int id) {
          noteDao.deleteNote(id);
+    }
+
+    @Override
+    public void updateAllFavorite(boolean isfav) {
+        noteDao.updateAllFavorite(false);
     }
 }

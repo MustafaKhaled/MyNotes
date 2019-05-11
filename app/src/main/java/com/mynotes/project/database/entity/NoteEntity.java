@@ -13,12 +13,12 @@ public class NoteEntity {
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
-    Integer id;
+    private Integer id;
     @NonNull
-    String name;
+    private String name;
     @Nullable
-    String noteText;
-    boolean isFavorite;
+    private String noteText;
+    private boolean isFavorite;
 
 
         public NoteEntity( @NonNull String name, @Nullable String noteText, boolean isFavorite) {
