@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.mynotes.project.features.notedetails.repo.NoteDetailsRepository;
+import com.mynotes.project.util.SharedPreferenceManager;
 
 import javax.inject.Inject;
 
@@ -19,10 +20,12 @@ import io.reactivex.schedulers.Schedulers;
 public class NoteDetailsFragmentViewModel extends ViewModel {
     private static final String TAG = "NoteDetailsFragmentView";
     private NoteDetailsRepository noteDetailsRepository;
+    private SharedPreferenceManager sharedPreferenceManager;
     private CompositeDisposable disposable = new CompositeDisposable();
     @Inject
-    public NoteDetailsFragmentViewModel(NoteDetailsRepository noteDetailsRepository) {
+    public NoteDetailsFragmentViewModel(NoteDetailsRepository noteDetailsRepository, SharedPreferenceManager sharedPreferenceManager) {
         this.noteDetailsRepository = noteDetailsRepository;
+        this.sharedPreferenceManager = sharedPreferenceManager;
     }
 
     public void updateNote(int id, String text){
@@ -46,7 +49,7 @@ public class NoteDetailsFragmentViewModel extends ViewModel {
         });
     }
 
-    public void updateFavorite(int id, boolean b){
+    public void updateFavorite(int id, boolean b,String noteText){
         Completable.fromAction(() -> noteDetailsRepository.updateFavorite(id,b))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -58,6 +61,13 @@ public class NoteDetailsFragmentViewModel extends ViewModel {
                     @Override
                     public void onComplete() {
                         Log.d(TAG, "onComplete: favorite updated");
+                        if(b){
+                            sharedPreferenceManager.saveStringData("favorite",noteText);
+                        }
+                        else{
+                            sharedPreferenceManager.saveStringData("favorite","");
+
+                        }
                     }
 
                     @Override

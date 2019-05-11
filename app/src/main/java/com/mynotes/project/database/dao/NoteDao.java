@@ -33,4 +33,8 @@ public interface NoteDao {
 
     @Query("UPDATE notes SET isFavorite=:isfav")
     void updateAllFavorite(boolean isfav);
+
+    @Query("SELECT noteText from notes WHERE isFavorite='true'")
+    String getFavoriteItem();
+
 }

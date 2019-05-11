@@ -1,4 +1,7 @@
 package com.mynotes.project.features.notedetails.ui;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,11 +22,13 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.GetTokenResult;
 import com.mynotes.project.R;
 import com.mynotes.project.di.multibinding.DaggerViewModelFactory;
 import com.mynotes.project.features.notedetails.di.component.DaggerNoteDetailsFragmentComponent;
 import com.mynotes.project.features.notedetails.di.component.NoteDetailsFragmentComponent;
 import com.mynotes.project.features.notedetails.viewmodel.NoteDetailsFragmentViewModel;
+import com.mynotes.project.features.widget.MyFavoriteNoteWidget;
 import com.mynotes.project.util.MyApplication;
 import javax.inject.Inject;
 import butterknife.BindView;
@@ -70,12 +75,13 @@ public class NoteDetailsFragment extends Fragment {
 
             case R.id.make_favorite:
                 noteDetailsFragmentViewModel.updateAllFavoriteToFalse();
-                noteDetailsFragmentViewModel.updateFavorite(noteId,true);
+                noteDetailsFragmentViewModel.updateFavorite(noteId,true,noteEt.getText().toString());
+                updateWidgetStatus();
                 isfavorite = true;
                 return true;
 
             case R.id.unfavorite_item:
-                noteDetailsFragmentViewModel.updateFavorite(noteId,false);
+                noteDetailsFragmentViewModel.updateFavorite(noteId,false,noteEt.getText().toString());
                 isfavorite = false;
 
         }
@@ -145,5 +151,13 @@ public class NoteDetailsFragment extends Fragment {
         noBtn.setOnClickListener(v -> {
             dialog.dismiss();
         });
+    }
+
+    private void updateWidgetStatus(){
+        Intent intent = new Intent(getActivity(), MyFavoriteNoteWidget.class);
+        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+        int ids[] = AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), MyFavoriteNoteWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        getActivity().sendBroadcast(intent);
     }
 }

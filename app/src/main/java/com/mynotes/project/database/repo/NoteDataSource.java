@@ -51,4 +51,9 @@ public class NoteDataSource implements NoteRepository{
     public void updateAllFavorite(boolean isfav) {
         noteDao.updateAllFavorite(false);
     }
+
+    @Override
+    public String getFavoriteNote() {
+       return noteDao.getFavoriteItem();
+    }
 }

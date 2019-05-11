@@ -3,6 +3,7 @@ package com.mynotes.project.features.notedetails.repo;
 import androidx.lifecycle.LiveData;
 
 import com.mynotes.project.database.repo.NoteRepository;
+import com.mynotes.project.util.SharedPreferenceManager;
 
 import javax.inject.Inject;
 
@@ -11,7 +12,6 @@ import dagger.multibindings.IntKey;
 public class NoteDetailsRepository {
 
     private NoteRepository noteRepository;
-
     @Inject
     public NoteDetailsRepository(NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
@@ -32,4 +32,5 @@ public class NoteDetailsRepository {
     public void updateAllFavorites(){
         noteRepository.updateAllFavorite(false);
     }
+
 }

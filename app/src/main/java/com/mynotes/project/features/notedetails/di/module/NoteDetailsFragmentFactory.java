@@ -3,6 +3,7 @@ package com.mynotes.project.features.notedetails.di.module;
 import androidx.lifecycle.ViewModel;
 
 import com.mynotes.project.di.multibinding.ViewModelKey;
+import com.mynotes.project.di.sharedpreference.SharedPreferenceModule;
 import com.mynotes.project.features.notedetails.di.scope.NoteDetailsFragmentScope;
 import com.mynotes.project.features.notedetails.viewmodel.NoteDetailsFragmentViewModel;
 
