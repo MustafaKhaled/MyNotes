@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/make_favorite"
-        android:icon="@drawable/ic_favorite_border_white_24dp"
         android:enabled="true"
         android:orderInCategory="1"
         android:title="@string/make_it_favorite_label" />
 
     <item android:id="@+id/unfavorite_item"
         android:enabled="true"
+        android:orderInCategory="2"
         android:title="@string/remove_from_favorite_menu"/>
 
     <item

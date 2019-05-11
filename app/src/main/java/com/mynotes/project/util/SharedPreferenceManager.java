@@ -30,11 +30,13 @@ public class SharedPreferenceManager {
         if(mySharedPref!=null){
             SharedPreferences.Editor editor = mySharedPref.edit();
             editor.remove(key);
-            editor.apply();
-
             editor.putString(key,value);
-            editor.apply();
+            editor.commit();
         }
+    }
+
+    public void removeData(String key){
+        mySharedPref.edit().remove(key).commit();
     }
 
 

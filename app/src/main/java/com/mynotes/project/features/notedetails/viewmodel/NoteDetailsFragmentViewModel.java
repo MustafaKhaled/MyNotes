@@ -61,13 +61,7 @@ public class NoteDetailsFragmentViewModel extends ViewModel {
                     @Override
                     public void onComplete() {
                         Log.d(TAG, "onComplete: favorite updated");
-                        if(b){
-                            sharedPreferenceManager.saveStringData("favorite",noteText);
-                        }
-                        else{
-                            sharedPreferenceManager.saveStringData("favorite","");
 
-                        }
                     }
 
                     @Override
@@ -102,6 +96,8 @@ public class NoteDetailsFragmentViewModel extends ViewModel {
                     }
                 });
     }
+
+
 
     @Override
     protected void onCleared() {

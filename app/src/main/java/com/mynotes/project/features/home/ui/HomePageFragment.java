@@ -1,6 +1,7 @@
 package com.mynotes.project.features.home.ui;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,6 +46,8 @@ public class HomePageFragment extends Fragment implements OnNoteListnerInterface
     private static final String TAG = "HomePageFragment";
     private HomePageViewModel homePageViewModel;
     private List<NoteEntity> noteEntityList;
+    private GridLayoutManager gridLayoutManager ;
+    private Parcelable mListState;
     @Inject
     DaggerViewModelFactory daggerViewModelFactory;
     private HomePageComponent homePageComponent;
@@ -63,7 +66,10 @@ public class HomePageFragment extends Fragment implements OnNoteListnerInterface
         homePageComponent = DaggerHomePageComponent.builder().appComponent(((MyApplication) getActivity().getApplicationContext()).getAppComponent()).build();
         homePageComponent.inject(this);
         homePageViewModel = ViewModelProviders.of(this,daggerViewModelFactory).get(HomePageViewModel.class);
+//        gridLayoutManager = ;
+        setRetainInstance(true);
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -99,11 +105,31 @@ public class HomePageFragment extends Fragment implements OnNoteListnerInterface
             showBottomSheetDialog();
         });
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        mListState = gridLayoutManager.onSaveInstanceState();
+//        outState.putParcelable("state", mListState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+//        if(savedInstanceState != null)
+//            mListState = savedInstanceState.getParcelable("state");
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getActivity().getResources().getString(R.string.my_notes_label));
+
+//        if (mListState != null) {
+//            gridLayoutManager.onRestoreInstanceState(mListState);
+//        }
     }
      private void showBottomSheetDialog() {
         View sheetView = getLayoutInflater().inflate(R.layout.new_note_bottom_nav, null);
@@ -122,7 +148,7 @@ public class HomePageFragment extends Fragment implements OnNoteListnerInterface
     }
     private void setUpRecyclerView(){
         notesRv.setAdapter(noteAdapter);
-        notesRv.setLayoutManager(new GridLayoutManager(getContext(),2,RecyclerView.VERTICAL,false));
+        notesRv.setLayoutManager(new GridLayoutManager(getActivity(),2,RecyclerView.VERTICAL,false));
         FadeInUpAnimator fade = new FadeInUpAnimator();
         fade.setAddDuration(500);
         notesRv.setItemAnimator(fade);
