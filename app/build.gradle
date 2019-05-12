@@ -4,6 +4,22 @@ apply plugin: 'androidx.navigation.safeargs'
 
 
 android {
+    signingConfigs {
+
+
+        release {
+            storeFile file('keystore/release.keystore')
+            storePassword 'note123'
+            keyAlias = 'note123'
+            keyPassword 'note123'
+        }
+        debug {
+            storeFile file('keystore/debug.keystore')
+            storePassword 'note123'
+            keyAlias = 'note123'
+            keyPassword 'note123'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.mynotes.project"
@@ -12,11 +28,16 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.debug
         }
     }
 
