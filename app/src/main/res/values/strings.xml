@@ -10,4 +10,13 @@
     <string name="no_btn">No</string>
     <string name="remove_from_favorite_menu">Remove from favorite</string>
     <string name="my_favorite_note_label">My Favorite Note</string>
+    <string name="add_new_note_content">Add new note</string>
+    <string name="start_write_here_content">Start write here</string>
+    <string name="this_ad_banner_content">This Ad Banner</string>
+    <string name="adding_note_button_content">Adding note button</string>
+    <string name="write_note_name_content">Write note name</string>
+    <string name="note_sample_image_content">Note sample image</string>
+    <string name="yes_button_content">Yes button</string>
+    <string name="no_button_content">No button</string>
+    <string name="save_note_message_content">Save Note message</string>
 </resources>

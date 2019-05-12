@@ -31,6 +31,7 @@
             android:layout_marginBottom="@dimen/_40sdp"
             android:src="@drawable/ic_add_white_24dp"
             app:fabCustomSize="@dimen/_50sdp"
+            android:contentDescription="@string/add_new_note_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:maxImageSize="@dimen/_40sdp" />

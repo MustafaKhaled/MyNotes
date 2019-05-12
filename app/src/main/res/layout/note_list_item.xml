@@ -38,6 +38,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/_4sdp"
                     android:layout_marginBottom="@dimen/_16sdp"
+                    android:contentDescription="@string/note_sample_image_content"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
                     android:foregroundGravity="center"
