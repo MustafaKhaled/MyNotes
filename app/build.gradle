@@ -4,19 +4,18 @@ apply plugin: 'androidx.navigation.safeargs'
 
 
 android {
+
     signingConfigs {
-
-
-        release {
-            storeFile file('keystore/release.keystore')
+        debug {
+            storeFile file('src/note_keystore.jks')
             storePassword 'note123'
-            keyAlias = 'note123'
+            keyAlias = 'note'
             keyPassword 'note123'
         }
-        debug {
-            storeFile file('keystore/debug.keystore')
+        release {
+            storeFile file('src/note_keystore.jks')
             storePassword 'note123'
-            keyAlias = 'note123'
+            keyAlias = 'note'
             keyPassword 'note123'
         }
     }
@@ -28,17 +27,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.debug
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-        debug {
-            signingConfig signingConfigs.debug
-        }
+        signingConfig signingConfigs.release
     }
 
     dataBinding {
@@ -47,6 +36,14 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        debug {
+        signingConfig signingConfigs.debug
+        }
+        release {
+        signingConfig signingConfigs.release
+        }
     }
 
 }
